@@ -1,0 +1,67 @@
+<!-- <div class="container mt-4">
+  Форма для добавления новой задачи
+  <form (ngSubmit)="addTodo()" class="mb-4">
+    <input [(ngModel)]="newTodo.description" 
+           name="description" 
+           placeholder="Beschreibung" 
+           class="form-control mb-2" 
+           required>
+
+    <button type="submit" class="btn btn-primary">Hinzufügen</button>
+  </form>
+
+  Список задач
+  <div class="row">
+    <div *ngFor="let todo of todos" class="col-12 col-md-4 col-lg-2 mb-3">
+      <div class="card" 
+           [ngClass]="{'bg-success': todo.status === 'erledigt', 'bg-light': todo.status === 'offen'}">
+        <div class="card-body">
+          <p>{{ todo.description }}</p>
+          <p>{{ todo.dueDate }}</p>
+          <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">Löschen</button>
+          <button 
+            class="btn btn-sm btn-secondary" 
+            *ngIf="todo.status === 'offen'" 
+            (click)="updateStatus(todo.id)">
+            Erledigt markieren
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container mt-4">
+  <!-- Форма для добавления новой задачи -->
+  <form (ngSubmit)="addTodo()" class="mb-4">
+    <input [(ngModel)]="newTodo.description" 
+           name="description" 
+           placeholder="Beschreibung" 
+           class="form-control mb-2" 
+           required>
+    <button type="submit" class="btn btn-primary">Hinzufügen</button>
+  </form>
+
+  <!-- Список задач -->
+  <div class="row">
+    <div *ngFor="let todo of todos" class="col-12 col-md-4 col-lg-2 mb-3">
+      <div class="card" 
+           [ngClass]="{
+             'bg-success': todo.state === 'IN_PROGRESS', 
+             'bg-primary': todo.state === 'DONE'
+           }"
+           (click)="toggleStatus(todo)">
+        <div class="card-body">
+          <p>{{ todo.description }}</p>
+          <p>{{ todo.dueDate }}</p>
+          <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">Löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  
