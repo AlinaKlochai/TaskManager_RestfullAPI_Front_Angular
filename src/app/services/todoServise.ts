@@ -26,4 +26,5 @@ export class TodoService {
   updateStatus(id: number): Observable<Todo> {
     return this.http.put<Todo>(`${this.baseApiUrl}/toDo/${id}`, null);
   }
+  
 }
