@@ -6,5 +6,4 @@ export interface Todo {
 }
 
 export type State = 'OPEN' | 'DONE';
-
   

@@ -5,6 +5,11 @@ import { TodoService } from '../services/todoServise';  // Для работы �
 import { Todo } from '../models/todo'; 
 import { HttpClientModule } from '@angular/common/http';
 
+interface FieldError {
+  field: string;
+  message: string;
+}
+
 @Component({
   selector: 'app-todo-list',
   standalone: true,  // Указываем, что это standalone компонент
@@ -36,12 +41,23 @@ export class TodoListComponent implements OnInit {
         this.newTodo = { description: '', dueDate: '', state: 'OPEN' };
         this.errorMessage = [];
       },
-      error: (err) => {
+      error: (err: { error: { errors: FieldError[] } }) => {  // Явная типизация ошибки
         console.error('Error creating TODO', err);
-
-        // Проверка на наличие ошибок в формате поля "fieldErrors"
-        if (err.error && err.error.fieldErrors && Array.isArray(err.error.fieldErrors)) {
-          this.errorMessage = err.error.fieldErrors.map((fieldError: any) => fieldError.message); // Собираем все сообщения об ошибках
+  
+        // Проверка на наличие ошибок в формате поля "errors"
+        if (err.error && Array.isArray(err.error.errors)) {
+          // Группируем ошибки по полям
+          const groupedErrors = err.error.errors.reduce((acc: { [key: string]: string[] }, fieldError: FieldError) => {
+            if (!acc[fieldError.field]) {
+              acc[fieldError.field] = [];
+            }
+            acc[fieldError.field].push(fieldError.message);
+            return acc;
+          }, {});
+  
+          // Преобразуем ошибки в строку и присваиваем errorMessage
+          this.errorMessage = Object.values(groupedErrors)
+            .flatMap((messages: string[]) => messages.join('. ')); // Склеиваем ошибки в одну строку
         } else {
           // Если ошибка не в ожидаемом формате, выводим общее сообщение
           this.errorMessage = ['Beim Erstellen einer Aufgabe ist ein Fehler aufgetreten'];
