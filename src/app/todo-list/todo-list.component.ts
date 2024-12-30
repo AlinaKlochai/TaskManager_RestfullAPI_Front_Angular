@@ -19,7 +19,7 @@ interface FieldError {
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
-  newTodo: Partial<Todo> = { description: '', dueDate: '', state: 'OPEN' };  // Инициализация с 'OFFEN'
+  newTodo: Partial<Todo> = { description: '', dueDate: '', state: 'OPEN' };  
   errorMessage: string[] = [];
 
   constructor(private todoService: TodoService) {}
