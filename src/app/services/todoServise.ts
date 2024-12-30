@@ -20,6 +20,7 @@ export class TodoService {
   }  
 
   deleteTodo(id: number): Observable<void> {
+    console.log(`Deleting todo with id: ${id}`);
     return this.http.delete<void>(`${this.baseApiUrl}/todo/${id}`);
   }
 

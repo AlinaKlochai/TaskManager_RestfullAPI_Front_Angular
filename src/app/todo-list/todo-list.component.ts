@@ -15,8 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   newTodo: Partial<Todo> = { description: '', dueDate: '', state: 'OPEN' };  // Инициализация с 'OFFEN'
-
-  errorMessage: string = ''; // Поле для хранения ошибки
+  errorMessage: string[] = [];
 
   constructor(private todoService: TodoService) {}
 
@@ -30,28 +29,35 @@ export class TodoListComponent implements OnInit {
     });
   }
 
-  // addTodo(): void {
-  //   this.todoService.createTodo(this.newTodo).subscribe(() => {
-  //     this.loadTodos();
-  //     this.newTodo = { description: '', dueDate: '' }; // Сбросить форму
-  //   });
-  // }
-
   addTodo(): void {
     this.todoService.createTodo(this.newTodo).subscribe({
       next: () => {
         this.loadTodos();
         this.newTodo = { description: '', dueDate: '', state: 'OPEN' };
+        this.errorMessage = [];
       },
       error: (err) => {
         console.error('Error creating TODO', err);
+
+        // Проверка на наличие ошибок в формате поля "fieldErrors"
+        if (err.error && err.error.fieldErrors && Array.isArray(err.error.fieldErrors)) {
+          this.errorMessage = err.error.fieldErrors.map((fieldError: any) => fieldError.message); // Собираем все сообщения об ошибках
+        } else {
+          // Если ошибка не в ожидаемом формате, выводим общее сообщение
+          this.errorMessage = ['Beim Erstellen einer Aufgabe ist ein Fehler aufgetreten'];
+        }
       },
     });
   }  
 
   deleteTodo(id: number): void {
-    this.todoService.deleteTodo(id).subscribe(() => {
-      this.loadTodos();
+    this.todoService.deleteTodo(id).subscribe({
+      next: () => {
+        this.loadTodos();
+      },
+      error: (err) => {
+        console.error(`Error deleting todo with id ${id}:`, err);
+      }
     });
   }
 
