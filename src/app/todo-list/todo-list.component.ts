@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Импортируем CommonModule для использования директив (например, ngFor)
 import { FormsModule } from '@angular/forms'; // Для ngModel
-import { TodoService } from '../services/todoServise';  // Для работы с сервисами
+import { TodoService } from '../services/todoServise';  
 import { Todo } from '../models/todo'; 
 import { HttpClientModule } from '@angular/common/http';
 
