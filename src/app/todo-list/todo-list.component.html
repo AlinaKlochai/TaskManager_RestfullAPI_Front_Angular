@@ -6,6 +6,14 @@
            placeholder="Beschreibung" 
            class="form-control mb-2" 
            required>
+    
+    <!-- Поле для выбора даты -->
+    <input [(ngModel)]="newTodo.dueDate" 
+           name="dueDate" 
+           type="date" 
+           class="form-control mb-2" 
+           required>
+    
     <button type="submit" class="btn btn-primary">Hinzufügen</button>
   </form>
 
@@ -19,22 +27,16 @@
     <div *ngFor="let todo of todos" class="col-12 col-md-4 col-lg-2 mb-3">
       <div class="card" 
            [ngClass]="{
-             'bg-success': todo.state === 'IN_PROGRESS', 
+             'bg-success': todo.state === 'OPEN', 
              'bg-primary': todo.state === 'DONE'
            }"
            (click)="toggleStatus(todo)">
         <div class="card-body">
           <p>{{ todo.description }}</p>
-          <p>{{ todo.dueDate }}</p>
+          <p>{{ todo.dueDate | date: 'dd.MM.yyyy' }}</p> <!-- Отображение даты в формате DD.MM.YYYY -->
           <button class="btn btn-sm btn-danger" (click)="deleteTodo(todo.id)">Löschen</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-  

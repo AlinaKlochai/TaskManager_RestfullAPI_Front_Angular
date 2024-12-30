@@ -14,7 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
-  newTodo: Partial<Todo> = { description: '', dueDate: '' };
+  newTodo: Partial<Todo> = { description: '', dueDate: '', state: 'OPEN' };  // Инициализация с 'OFFEN'
+
   errorMessage: string = ''; // Поле для хранения ошибки
 
   constructor(private todoService: TodoService) {}
@@ -36,27 +37,17 @@ export class TodoListComponent implements OnInit {
   //   });
   // }
 
-addTodo(): void {
-  this.todoService.createTodo(this.newTodo).subscribe({
-    next: () => {
-      this.loadTodos();
-      this.newTodo = { description: '', dueDate: '' }; // Сбросить форму
-      this.errorMessage = ''; // Сбросить ошибку
-    },
-    error: (err) => {
-      if (err.error && err.error.errors) {
-        const descriptionError = err.error.errors.find(
-          (e: any) => e.field === 'description'
-        );
-        if (descriptionError) {
-          this.errorMessage = descriptionError.message;
-        }
-      } else {
-        this.errorMessage = 'An unexpected error occurred.';
-      }
-    },
-  });
-}
+  addTodo(): void {
+    this.todoService.createTodo(this.newTodo).subscribe({
+      next: () => {
+        this.loadTodos();
+        this.newTodo = { description: '', dueDate: '', state: 'OPEN' };
+      },
+      error: (err) => {
+        console.error('Error creating TODO', err);
+      },
+    });
+  }  
 
   deleteTodo(id: number): void {
     this.todoService.deleteTodo(id).subscribe(() => {
@@ -66,16 +57,17 @@ addTodo(): void {
 
   // Метод для переключения статуса задачи
   toggleStatus(todo: Todo): void {
-    if (todo.state === 'IN_PROGRESS') {
-      todo.state = 'DONE';  // Если статус IN_PROGRESS, меняем на DONE
+    if (todo.state === 'OPEN') {
+      todo.state = 'DONE';  // Меняем с 'OFFEN' на 'DONE'
     } else if (todo.state === 'DONE') {
-      todo.state = 'IN_PROGRESS';  // Если DONE, меняем на IN_PROGRESS
+      todo.state = 'OPEN';  // Меняем с 'DONE' на 'OFFEN'
     }
-
+  
     // Обновляем статус на сервере
     this.todoService.updateStatus(todo.id).subscribe({
       next: () => this.loadTodos(), // Загружаем обновленный список задач
       error: (err) => console.error('Error with updating status', err)
     });
   }
+  
 }

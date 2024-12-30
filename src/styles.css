@@ -24,6 +24,19 @@
   background-color: #007bff !important; /* Синий для DONE */
 }
 
+.chip {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 15px;
+  background-color: #f5f5f5;
+}
+
+.chip.erledigt {
+  background-color: #c8e6c9;
+}
+
   
   @media (max-width: 768px) {
     .col-md-4, .col-lg-2 {

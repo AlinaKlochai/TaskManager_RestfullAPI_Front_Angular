@@ -12,19 +12,19 @@ export class TodoService {
   constructor(private http: HttpClient) {}
 
   getTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(`${this.baseApiUrl}/toDos/`);
+    return this.http.get<Todo[]>(`${this.baseApiUrl}/todos/`);
   }
 
   createTodo(todo: Partial<Todo>): Observable<Todo> {
-    return this.http.post<Todo>(`${this.baseApiUrl}/toDo/`, todo);
-  }
+    return this.http.post<Todo>(`${this.baseApiUrl}/todo/`, todo); // Исправленный путь
+  }  
 
   deleteTodo(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseApiUrl}/toDo/${id}`);
+    return this.http.delete<void>(`${this.baseApiUrl}/todo/${id}`);
   }
 
   updateStatus(id: number): Observable<Todo> {
-    return this.http.put<Todo>(`${this.baseApiUrl}/toDo/${id}`, null);
+    return this.http.put<Todo>(`${this.baseApiUrl}/todo/${id}`, null);
   }
   
 }
